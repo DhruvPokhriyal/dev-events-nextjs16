@@ -63,3 +63,6 @@ export async function GET() {
         return NextResponse.json({message: 'Failed to fetch events', error: error instanceof Error ? error.message : 'Unknown error'}, { status: 500 });
     }
 }
+
+
+
