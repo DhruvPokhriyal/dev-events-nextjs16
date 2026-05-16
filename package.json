@@ -13,7 +13,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^1.16.0",
     "mongodb": "^7.2.0",
-    "mongoose": "^8.0.0",
+    "mongoose": "^8.24.0",
     "next": "16.2.6",
     "ogl": "^1.0.11",
     "posthog-js": "^1.373.5",
