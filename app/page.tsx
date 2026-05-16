@@ -1,9 +1,16 @@
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
 import React from "react";
-import { events } from "@/lib/constants";
+import { EventDocumentShape } from "@/database/event.model";
 
-const Page = () => {
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+const Page = async () => {
+    const response = await fetch(`${BASE_URL}/api/events`, {
+        cache: "no-store",
+    });
+    const { events } = await response.json();
+
     return (
         <section>
             <h1 className="text-center">
@@ -17,14 +24,18 @@ const Page = () => {
                 <h3>Featured Events</h3>
 
                 <ul className="events">
-                    {events.map((event, index) => (
-                        <li
-                            key={event.slug}
-                            className={index === 0 ? "featured" : ""}
-                        >
-                            <EventCard {...event} />
-                        </li>
-                    ))}
+                    {events &&
+                        events.length > 0 &&
+                        events.map(
+                            (event: EventDocumentShape, index: number) => (
+                                <li
+                                    key={event.slug}
+                                    className={index === 0 ? "featured" : ""}
+                                >
+                                    <EventCard {...event} />
+                                </li>
+                            ),
+                        )}
                 </ul>
             </div>
         </section>
