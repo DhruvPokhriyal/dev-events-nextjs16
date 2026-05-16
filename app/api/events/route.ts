@@ -48,3 +48,18 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({message: 'Event Creation Failed', error: error instanceof Error ? error.message : 'Unknown error'}, { status: 500 });
     }
 }
+
+export async function GET() {
+    try {
+
+        await connectToDatabase();
+
+        const events = await Event.find().sort({ createdAt: -1 });
+
+        return NextResponse.json( {message: 'Events fetched successfully', events}, { status: 200 });
+
+    } catch (error) {
+        console.error("Error handling GET request:", error);
+        return NextResponse.json({message: 'Failed to fetch events', error: error instanceof Error ? error.message : 'Unknown error'}, { status: 500 });
+    }
+}
