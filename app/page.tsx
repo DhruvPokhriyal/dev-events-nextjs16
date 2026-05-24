@@ -23,14 +23,18 @@ const Page = async () => {
             <div className="mt-20 space-y-7">
                 <h3>Featured Events</h3>
 
-                <ul className="events">
+                <ul className="events list-none">
                     {events &&
                         events.length > 0 &&
                         events.map(
                             (event: EventDocumentShape, index: number) => (
                                 <li
                                     key={event.slug}
-                                    className={index === 0 ? "featured" : ""}
+                                    className={
+                                        index === 0
+                                            ? "featured"
+                                            : "" + " list-none"
+                                    }
                                 >
                                     <EventCard {...event} />
                                 </li>

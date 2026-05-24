@@ -6,7 +6,7 @@ export async function GET(
     request: NextRequest,
     { params }: { params: Promise<{ slug: string }> },
 ) {
-    try {
+    try { 
         await connectToDatabase();
         const { slug } = await params;
         try {
