@@ -2,10 +2,13 @@ import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
 import React from "react";
 import { EventDocumentShape } from "@/database/event.model";
+import { cacheLife } from "next/cache";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 const Page = async () => {
+    "use cache";
+    cacheLife("hours");
     const response = await fetch(`${BASE_URL}/api/events`, {
         cache: "no-store",
     });
