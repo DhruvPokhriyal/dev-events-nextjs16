@@ -2,12 +2,13 @@ import React, { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import BookEvent from "@/components/BookEvent";
-import { getSimilarEventsBySlug } from "@/lib/actions/event.actions";
+import {
+    getEventBySlug,
+    getSimilarEventsBySlug,
+} from "@/lib/actions/event.actions";
 import EventCard from "@/components/EventCard";
 import { EventDocumentShape } from "@/database/event.model";
 import { cacheLife } from "next/cache";
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 const EventDetailItem = ({
     icon,
@@ -53,24 +54,23 @@ const EventDetailsContent = async ({
     "use cache";
     cacheLife("hours");
     const { slug } = await params;
-    const request = await fetch(`${BASE_URL}/api/events/${slug}`);
+    const event = await getEventBySlug(slug);
+    if (!event) return notFound();
+
     const {
-        event: {
-            _id,
-            description,
-            image,
-            overview,
-            date,
-            time,
-            location,
-            mode,
-            agenda,
-            audience,
-            tags,
-            organizer,
-        },
-    } = await request.json();
-    if (!description) return notFound();
+        _id,
+        description,
+        image,
+        overview,
+        date,
+        time,
+        location,
+        mode,
+        agenda,
+        audience,
+        tags,
+        organizer,
+    } = event;
 
     const bookings = 10;
     const similarEvents: EventDocumentShape[] = (await getSimilarEventsBySlug(

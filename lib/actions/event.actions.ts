@@ -3,10 +3,46 @@
 import { Event, EventDocumentShape } from '@/database/event.model';
 import connectToDatabase from "../mongodb";
 
-export const getSimilarEventsBySlug = async (slug : string) => {
+export type EventWithId = EventDocumentShape & { _id: string };
+
+const toSerializableEvent = (
+    event: EventDocumentShape & { _id: { toString(): string } | string },
+): EventWithId => ({
+    ...event,
+    _id: event._id.toString(),
+});
+
+export const getAllEvents = async (): Promise<EventWithId[]> => {
     try {
         await connectToDatabase();
-        const event = await Event.findOne({slug});
+
+        const events = await Event.find().sort({ createdAt: -1 }).lean();
+
+        return events.map((event) => toSerializableEvent(event));
+    } catch (error) {
+        console.error('get all events failed', error);
+        return [];
+    }
+};
+
+export const getEventBySlug = async (
+    slug: string,
+): Promise<EventWithId | null> => {
+    try {
+        await connectToDatabase();
+
+        const event = await Event.findOne({ slug }).lean();
+
+        return event ? toSerializableEvent(event) : null;
+    } catch (error) {
+        console.error('get event by slug failed', error);
+        return null;
+    }
+};
+
+export const getSimilarEventsBySlug = async (slug : string) => {
+    try {
+        const event = await getEventBySlug(slug);
         if (!event) throw new Error("Event not found");
 
         // 1. THIS IS THE MISSING PIECE: Fetch the events from the database first

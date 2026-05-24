@@ -1,18 +1,13 @@
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
 import React from "react";
-import { EventDocumentShape } from "@/database/event.model";
+import { getAllEvents } from "@/lib/actions/event.actions";
 import { cacheLife } from "next/cache";
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 const Page = async () => {
     "use cache";
     cacheLife("hours");
-    const response = await fetch(`${BASE_URL}/api/events`, {
-        cache: "no-store",
-    });
-    const { events } = await response.json();
+    const events = await getAllEvents();
 
     return (
         <section>
@@ -29,8 +24,7 @@ const Page = async () => {
                 <ul className="events list-none">
                     {events &&
                         events.length > 0 &&
-                        events.map(
-                            (event: EventDocumentShape, index: number) => (
+                        events.map((event, index: number) => (
                                 <li
                                     key={event.slug}
                                     className={
