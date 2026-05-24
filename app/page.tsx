@@ -25,18 +25,15 @@ const Page = async () => {
                     {events &&
                         events.length > 0 &&
                         events.map((event, index: number) => (
-                                <li
-                                    key={event.slug}
-                                    className={
-                                        index === 0
-                                            ? "featured"
-                                            : "" + " list-none"
-                                    }
-                                >
-                                    <EventCard {...event} />
-                                </li>
-                            ),
-                        )}
+                            <li
+                                key={event.slug}
+                                className={
+                                    index === 0 ? "featured" : "" + " list-none"
+                                }
+                            >
+                                <EventCard {...event} />
+                            </li>
+                        ))}
                 </ul>
             </div>
         </section>
