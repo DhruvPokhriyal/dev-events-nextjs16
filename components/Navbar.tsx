@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import "@/instrumentation-client";
 import Link from "next/link";
 import Image from "next/image";
 import posthog from "posthog-js";

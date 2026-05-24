@@ -144,7 +144,10 @@ const EventDetailsContent = async ({
                                 Be the first to book your spot!
                             </p>
                         )}
-                        <BookEvent eventId={String(_id)} slug={slug}></BookEvent>
+                        <BookEvent
+                            eventId={String(_id)}
+                            slug={slug}
+                        ></BookEvent>
                     </div>
                 </aside>
             </div>
