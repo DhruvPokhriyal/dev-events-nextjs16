@@ -14,7 +14,11 @@ const Navbar = () => {
     return (
         <header>
             <nav>
-                <Link href="/" className="logo" onClick={() => handleNavClick("logo")}>
+                <Link
+                    href="/"
+                    className="logo"
+                    onClick={() => handleNavClick("logo")}
+                >
                     <Image
                         src="/icons/logo.png"
                         alt="Dev Events Logo"
@@ -24,9 +28,18 @@ const Navbar = () => {
                     <p>DevEvent</p>
                 </Link>
                 <ul>
-                    <Link href="/" onClick={() => handleNavClick("Home")}>Home</Link>
-                    <Link href="/" onClick={() => handleNavClick("Events")}>Events</Link>
-                    <Link href="/" onClick={() => handleNavClick("Create Event")}>Create Event</Link>
+                    <Link href="/" onClick={() => handleNavClick("Home")}>
+                        Home
+                    </Link>
+                    <Link href="/" onClick={() => handleNavClick("Events")}>
+                        Events
+                    </Link>
+                    <Link
+                        href="/"
+                        onClick={() => handleNavClick("Create Event")}
+                    >
+                        Create Event
+                    </Link>
                 </ul>
             </nav>
         </header>
