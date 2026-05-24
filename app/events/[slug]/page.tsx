@@ -1,10 +1,11 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import BookEvent from "@/components/BookEvent";
 import { getSimilarEventsBySlug } from "@/lib/actions/event.actions";
 import EventCard from "@/components/EventCard";
 import { EventDocumentShape } from "@/database/event.model";
+import { cacheLife } from "next/cache";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
@@ -27,7 +28,7 @@ const EventAgenda = ({ agendaItems }: { agendaItems: string[] }) => (
     <div className="agenda">
         <h2>Agenda</h2>
         <ul>
-            {agendaItems.map((item, index) => (
+            {agendaItems.map((item) => (
                 <li key={item}>{item}</li>
             ))}
         </ul>
@@ -44,15 +45,18 @@ const EventTags = ({ tags }: { tags: string[] }) => (
     </div>
 );
 
-const EventDetailsPage = async ({
+const EventDetailsContent = async ({
     params,
 }: {
     params: Promise<{ slug: string }>;
 }) => {
+    "use cache";
+    cacheLife("hours");
     const { slug } = await params;
     const request = await fetch(`${BASE_URL}/api/events/${slug}`);
     const {
         event: {
+            _id,
             description,
             image,
             overview,
@@ -140,7 +144,7 @@ const EventDetailsPage = async ({
                                 Be the first to book your spot!
                             </p>
                         )}
-                        <BookEvent></BookEvent>
+                        <BookEvent eventId={String(_id)} slug={slug}></BookEvent>
                     </div>
                 </aside>
             </div>
@@ -161,5 +165,15 @@ const EventDetailsPage = async ({
         </section>
     );
 };
+
+const EventDetailsPage = async ({
+    params,
+}: {
+    params: Promise<{ slug: string }>;
+}) => (
+    <Suspense fallback={null}>
+        <EventDetailsContent params={params} />
+    </Suspense>
+);
 
 export default EventDetailsPage;
